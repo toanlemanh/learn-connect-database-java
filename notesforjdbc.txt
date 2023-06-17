@@ -1,0 +1,77 @@
+ I.Steps to create a Connection between Java App and Database 
+ 
+ 1. Create a class JDBCUtil which owns jdbc utilities 
+     - JDBCUtil class should be Singleton
+     
+ 2. Prepare some crucial SQL classes: DriverManager, Connection, JDBC Driver 
+    from sql package
+	 
+	 - Initiates a Connection to null 
+	 - Register JDBC Driver with DriverManager
+**note: try-catch SQLException wrapper  
+	 
+ 3. Prepare some inputs for getting required Connection link from DriverManager
+     
+     - link : "jdbc:mySQL:// <local host> : <port> / <database>"
+     - user :
+     - pwd :
+     
+ 4. Return required Connection through getConnection () of DriverManager 
+     	
+      
+ II.Steps to close a Connection between Java App and Database 
+
+ 1. Check connection is opening or available 
+ 2. Using close () of this Connection by itself 
+ 
+**note: Always close after using Connection
+
+
+ III.How to inserting sql statements from jdbc
+ 
+  - There are 3 sorts of util classes for this work : 
+  Statement, PreparedStatement and CallableStatement 
+  
+  - Using PreparedStatement to prevent Security problems (SQL injection)
+  
+  Steps to use that classes:
+  
+  1. Write SQL statement
+  2. Open connection 
+    3. Initiates expected class 
+    4. Using it's method to properly require SQL command as needed
+    5. Handle the output 
+  6. Close connection 
+  
+  
+**example:
+   
+   1. String sql = "INSERT INTO DBO.TABLE (<A>,<B>,<C>) \n"
+                 + "VALUES (?,?,?)"
+                    
+   2. c = JDBCUtils.createConnection ()
+   
+   try {
+   
+   3.PreparedStatement pst = new PreparedStatement(sql);
+     pst.set<TYPE> ( <order of ?> , <value> );  
+   
+   4. ResultSet res = pst.executeQuery ();
+   
+       while ( res.next() ){
+            <TYPE> t = pst.get<TYPE>(<column>);
+        }
+        // next() checks each element whether the values in columns is null or not 
+        // get<TYPE> () returns values corresponding with columns, if available
+        
+   }
+   catch (SQLException e){
+      e.printStackTrace();
+   }
+   finally {
+   6.   JDBCUtils.closeConnection();
+   }
+  
+  
+    
+ 
